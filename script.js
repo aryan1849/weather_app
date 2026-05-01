@@ -7,6 +7,7 @@ const state = {
 };
 
 const els = {
+  openingAnimation: document.querySelector("#openingAnimation"),
   shell: document.querySelector(".weather-shell"),
   form: document.querySelector("#searchForm"),
   input: document.querySelector("#cityInput"),
@@ -36,6 +37,18 @@ const els = {
   sunDot: document.querySelector("#sunDot"),
   toast: document.querySelector("#toast"),
 };
+
+document.body.classList.add("intro-lock");
+
+function finishOpeningAnimation() {
+  document.body.classList.add("intro-done");
+  document.body.classList.remove("intro-lock");
+  els.openingAnimation.classList.add("is-hidden");
+}
+
+window.addEventListener("load", () => {
+  window.setTimeout(finishOpeningAnimation, 2500);
+});
 
 const unitLabel = () => state.unit === "metric" ? "C" : "F";
 const speedLabel = () => state.unit === "metric" ? "m/s" : "mph";
