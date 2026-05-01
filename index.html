@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aryan Weather Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="weather-shell" data-weather="clear">
+    <div class="sky-scene" aria-hidden="true">
+      <div class="sun-core"></div>
+      <div class="cloud cloud-one"></div>
+      <div class="cloud cloud-two"></div>
+      <div class="rain-field"></div>
+      <div class="star-field"></div>
+    </div>
+
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Aryan Weather Studio home">
+        <span class="brand-mark">AW</span>
+        <span>
+          <strong>Aryan Weather</strong>
+          <small>crafted by aryan</small>
+        </span>
+      </a>
+
+      <form class="search-panel" id="searchForm">
+        <label class="sr-only" for="cityInput">Search city</label>
+        <span class="search-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Zm0-2a5.3 5.3 0 1 0 0-10.6 5.3 5.3 0 0 0 0 10.6Zm5.1.2 4.2 4.2-1.4 1.4-4.2-4.2 1.4-1.4Z"/></svg>
+        </span>
+        <input id="cityInput" type="search" placeholder="Search city, country..." autocomplete="off">
+        <button class="icon-button" type="submit" title="Search" aria-label="Search">
+          <svg viewBox="0 0 24 24"><path d="m14 5 7 7-7 7-1.4-1.4 4.6-4.6H3v-2h14.2l-4.6-4.6L14 5Z"/></svg>
+        </button>
+      </form>
+
+      <div class="toolbar">
+        <button class="icon-button" id="locationBtn" type="button" title="Use current location" aria-label="Use current location">
+          <svg viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12A7 7 0 0 0 5 10c0 5.8 7 12 7 12Zm0-9a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/></svg>
+        </button>
+        <div class="unit-switch" role="group" aria-label="Temperature unit">
+          <button class="unit active" data-unit="metric" type="button">C</button>
+          <button class="unit" data-unit="imperial" type="button">F</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="dashboard">
+      <section class="hero-panel">
+        <div class="hero-copy">
+          <p class="eyebrow" id="statusLine">Live weather intelligence</p>
+          <h1 id="placeName">Loading weather...</h1>
+          <p class="condition" id="conditionText">Getting the latest atmosphere profile.</p>
+        </div>
+        <div class="temp-stack">
+          <img id="weatherIcon" src="" alt="" class="weather-icon">
+          <div class="temperature"><span id="tempValue">--</span><sup id="unitSymbol">C</sup></div>
+          <p id="feelsLike">Feels like --</p>
+        </div>
+        <div class="hero-meta">
+          <span id="localTime">--</span>
+          <span id="highLow">H -- / L --</span>
+        </div>
+      </section>
+
+      <section class="panel insight-panel">
+        <div>
+          <p class="section-label">Today</p>
+          <h2>Atmospheric Details</h2>
+        </div>
+        <div class="metric-grid">
+          <article class="metric-card">
+            <span class="metric-icon">Wind</span>
+            <strong id="windValue">--</strong>
+            <small id="windHint">direction --</small>
+          </article>
+          <article class="metric-card">
+            <span class="metric-icon">Humidity</span>
+            <strong id="humidityValue">--</strong>
+            <small>Dew-friendly index</small>
+          </article>
+          <article class="metric-card">
+            <span class="metric-icon">Pressure</span>
+            <strong id="pressureValue">--</strong>
+            <small>Sea level reading</small>
+          </article>
+          <article class="metric-card">
+            <span class="metric-icon">Visibility</span>
+            <strong id="visibilityValue">--</strong>
+            <small>Surface clarity</small>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel chart-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="section-label">Next 24 hours</p>
+            <h2>Temperature Flow</h2>
+          </div>
+          <span id="chartRange">--</span>
+        </div>
+        <canvas id="hourlyChart" width="900" height="260" aria-label="Hourly temperature chart"></canvas>
+        <div class="hourly-strip" id="hourlyStrip"></div>
+      </section>
+
+      <section class="panel forecast-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="section-label">Forecast</p>
+            <h2>5-Day Outlook</h2>
+          </div>
+          <span id="updatedAt">--</span>
+        </div>
+        <div class="forecast-list" id="forecastList"></div>
+      </section>
+
+      <section class="panel astro-panel">
+        <div>
+          <p class="section-label">Sun Cycle</p>
+          <h2>Golden Hour Map</h2>
+        </div>
+        <div class="sun-arc">
+          <div class="arc-line"></div>
+          <div class="sun-dot" id="sunDot"></div>
+        </div>
+        <div class="sun-times">
+          <span>Sunrise <strong id="sunriseTime">--</strong></span>
+          <span>Sunset <strong id="sunsetTime">--</strong></span>
+        </div>
+      </section>
+    </main>
+
+    <p class="signature">Crafted by Aryan</p>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
