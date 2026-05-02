@@ -10,6 +10,7 @@ const state = {
 
 const els = {
   openingAnimation: document.querySelector("#openingAnimation"),
+  loveEasterEgg: document.querySelector("#loveEasterEgg"),
   shell: document.querySelector(".weather-shell"),
   cityBackdrop: document.querySelector("#cityBackdrop"),
   landmarkLabel: document.querySelector("#landmarkLabel"),
@@ -62,6 +63,7 @@ const iconUrl = (code) => `https://openweathermap.org/img/wn/${code}@2x.png`;
 const round = (value) => Math.round(value);
 let suggestionTimer;
 let suggestionRequest;
+let loveTimer;
 
 const cityLandmarks = [
   { keys: ["new delhi", "delhi"], landmark: "delhi", label: "India Gate" },
@@ -86,6 +88,23 @@ function showToast(message) {
   els.toast.classList.add("show");
   window.clearTimeout(showToast.timer);
   showToast.timer = window.setTimeout(() => els.toast.classList.remove("show"), 3200);
+}
+
+function isLoveKeyword(value) {
+  return value.trim().toLowerCase() === "koyel";
+}
+
+function showLoveEasterEgg() {
+  window.clearTimeout(loveTimer);
+  hideSuggestions();
+  els.loveEasterEgg.classList.remove("show");
+  void els.loveEasterEgg.offsetWidth;
+  els.loveEasterEgg.classList.add("show");
+  els.loveEasterEgg.setAttribute("aria-hidden", "false");
+  loveTimer = window.setTimeout(() => {
+    els.loveEasterEgg.classList.remove("show");
+    els.loveEasterEgg.setAttribute("aria-hidden", "true");
+  }, 5200);
 }
 
 function titleCase(text) {
@@ -221,6 +240,11 @@ function requestSuggestions() {
 
   if (suggestionRequest) {
     suggestionRequest.abort();
+  }
+
+  if (isLoveKeyword(query)) {
+    showLoveEasterEgg();
+    return;
   }
 
   if (query.length < 2) {
@@ -452,6 +476,11 @@ els.form.addEventListener("submit", (event) => {
 
   const city = els.input.value.trim();
   if (!city) return;
+  if (isLoveKeyword(city)) {
+    showLoveEasterEgg();
+    return;
+  }
+
   state.city = city;
   state.coords = null;
   hideSuggestions();

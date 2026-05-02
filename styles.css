@@ -211,6 +211,208 @@ button {
   animation: fadeUp 700ms ease 620ms both;
 }
 
+.love-easter-egg {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(255, 122, 158, 0.28), transparent 28%),
+    radial-gradient(circle at 68% 62%, rgba(255, 224, 130, 0.2), transparent 26%),
+    rgba(3, 8, 13, 0.64);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  backdrop-filter: blur(18px) saturate(150%);
+  transition: opacity 260ms ease, visibility 260ms ease;
+}
+
+.love-easter-egg.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.love-sky {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.love-sky span {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ffd1dc;
+  box-shadow: 0 0 22px rgba(255, 122, 158, 0.72);
+  animation: loveSpark 2.8s ease-in-out infinite;
+}
+
+.love-sky span:nth-child(1) {
+  left: 15%;
+  top: 28%;
+}
+
+.love-sky span:nth-child(2) {
+  left: 25%;
+  top: 70%;
+  animation-delay: 260ms;
+}
+
+.love-sky span:nth-child(3) {
+  left: 46%;
+  top: 18%;
+  animation-delay: 520ms;
+}
+
+.love-sky span:nth-child(4) {
+  right: 28%;
+  top: 72%;
+  animation-delay: 780ms;
+}
+
+.love-sky span:nth-child(5) {
+  right: 16%;
+  top: 34%;
+  animation-delay: 1040ms;
+}
+
+.love-sky span:nth-child(6) {
+  left: 58%;
+  top: 84%;
+  animation-delay: 1300ms;
+}
+
+.love-card {
+  position: relative;
+  width: min(760px, calc(100vw - 36px));
+  min-height: 430px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  overflow: hidden;
+  padding: clamp(34px, 7vw, 72px);
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  border-radius: 8px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.08) 48%, rgba(255, 209, 220, 0.18)),
+    rgba(12, 18, 24, 0.76);
+  box-shadow: 0 30px 110px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  text-align: center;
+  transform: translateY(18px) scale(0.94);
+}
+
+.love-easter-egg.show .love-card {
+  animation: loveCardIn 820ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.love-card::before,
+.love-card::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.love-card::before {
+  inset: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+}
+
+.love-card::after {
+  left: 50%;
+  bottom: -16%;
+  width: 84%;
+  height: 36%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(255, 122, 158, 0.36), transparent 70%);
+  transform: translateX(-50%);
+  animation: loveGlow 1.9s ease-in-out infinite;
+}
+
+.love-kicker {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 14px;
+  color: #ffd1dc;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.love-card h2 {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  font-size: clamp(3.2rem, 9vw, 7.4rem);
+  line-height: 0.86;
+  letter-spacing: 0;
+}
+
+.love-card h2 span {
+  display: block;
+  background: linear-gradient(100deg, #ffffff 0%, #ffd1dc 45%, #ffe082 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: loveTextPop 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.love-card h2 span:nth-child(2) {
+  font-size: 0.72em;
+  animation-delay: 110ms;
+}
+
+.love-card h2 span:nth-child(3) {
+  animation-delay: 220ms;
+}
+
+.love-heart {
+  position: relative;
+  z-index: 1;
+  width: 58px;
+  height: 58px;
+  margin: 30px auto 18px;
+  background: #ff7a9e;
+  transform: rotate(45deg);
+  animation: heartBeat 980ms ease-in-out infinite;
+  box-shadow: 0 0 32px rgba(255, 122, 158, 0.62);
+}
+
+.love-heart::before,
+.love-heart::after {
+  content: "";
+  position: absolute;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: inherit;
+}
+
+.love-heart::before {
+  left: -29px;
+  top: 0;
+}
+
+.love-heart::after {
+  left: 0;
+  top: -29px;
+}
+
+.love-card p {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: rgba(245, 251, 255, 0.82);
+  font-size: clamp(1rem, 2vw, 1.18rem);
+  font-weight: 600;
+}
+
 .weather-shell {
   opacity: 0;
   transform: translateY(14px);
@@ -1171,6 +1373,53 @@ h2 {
 @keyframes rain {
   from { background-position: 0 0; }
   to { background-position: 0 120px; }
+}
+
+@keyframes loveSpark {
+  0%, 100% {
+    opacity: 0.35;
+    transform: translateY(0) scale(0.72);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-28px) scale(1.25);
+  }
+}
+
+@keyframes loveCardIn {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.94);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes loveTextPop {
+  0% {
+    opacity: 0;
+    transform: translateY(26px) scale(0.96);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes heartBeat {
+  0%, 100% { transform: rotate(45deg) scale(1); }
+  20% { transform: rotate(45deg) scale(1.12); }
+  36% { transform: rotate(45deg) scale(0.96); }
+  52% { transform: rotate(45deg) scale(1.08); }
+}
+
+@keyframes loveGlow {
+  0%, 100% { opacity: 0.58; transform: translateX(-50%) scaleX(0.9); }
+  50% { opacity: 1; transform: translateX(-50%) scaleX(1.08); }
 }
 
 @keyframes landmarkFloat {
