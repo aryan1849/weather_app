@@ -51,7 +51,8 @@
         <span class="search-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24"><path d="M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Zm0-2a5.3 5.3 0 1 0 0-10.6 5.3 5.3 0 0 0 0 10.6Zm5.1.2 4.2 4.2-1.4 1.4-4.2-4.2 1.4-1.4Z"/></svg>
         </span>
-        <input id="cityInput" type="search" placeholder="Search city, country..." autocomplete="off">
+        <input id="cityInput" type="search" placeholder="Search city, country..." autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-controls="citySuggestions">
+        <div class="suggestions-panel" id="citySuggestions" role="listbox" aria-label="City suggestions"></div>
         <button class="icon-button" type="submit" title="Search" aria-label="Search">
           <svg viewBox="0 0 24 24"><path d="m14 5 7 7-7 7-1.4-1.4 4.6-4.6H3v-2h14.2l-4.6-4.6L14 5Z"/></svg>
         </button>

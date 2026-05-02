@@ -4,6 +4,8 @@ const state = {
   city: "New Delhi",
   unit: "metric",
   coords: null,
+  suggestions: [],
+  activeSuggestion: -1,
 };
 
 const els = {
@@ -11,6 +13,7 @@ const els = {
   shell: document.querySelector(".weather-shell"),
   form: document.querySelector("#searchForm"),
   input: document.querySelector("#cityInput"),
+  suggestions: document.querySelector("#citySuggestions"),
   locationBtn: document.querySelector("#locationBtn"),
   unitBtns: document.querySelectorAll(".unit"),
   statusLine: document.querySelector("#statusLine"),
@@ -55,6 +58,8 @@ const speedLabel = () => state.unit === "metric" ? "m/s" : "mph";
 const apiUnit = () => `units=${state.unit}`;
 const iconUrl = (code) => `https://openweathermap.org/img/wn/${code}@2x.png`;
 const round = (value) => Math.round(value);
+let suggestionTimer;
+let suggestionRequest;
 
 function showToast(message) {
   els.toast.textContent = message;
@@ -99,8 +104,8 @@ function weatherMode(weather, icon) {
   return "clear";
 }
 
-async function fetchJson(url) {
-  const response = await fetch(url);
+async function fetchJson(url, options = {}) {
+  const response = await fetch(url, options);
   const data = await response.json();
   if (!response.ok) {
     throw new Error(data.message || "Weather service is unavailable.");
@@ -115,10 +120,113 @@ async function getWeatherByCity(city) {
   return Promise.all([fetchJson(currentUrl), fetchJson(forecastUrl)]);
 }
 
+async function getCitySuggestions(query, signal) {
+  const url = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(query)}&limit=6&appid=${apiKey}`;
+  return fetchJson(url, { signal });
+}
+
 async function getWeatherByCoords({ latitude, longitude }) {
   const currentUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&${apiUnit()}`;
   const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&${apiUnit()}`;
   return Promise.all([fetchJson(currentUrl), fetchJson(forecastUrl)]);
+}
+
+function formatSuggestion(place) {
+  return [place.name, place.state, place.country].filter(Boolean).join(", ");
+}
+
+function hideSuggestions() {
+  state.suggestions = [];
+  state.activeSuggestion = -1;
+  els.suggestions.classList.remove("show");
+  els.suggestions.innerHTML = "";
+  els.input.setAttribute("aria-expanded", "false");
+  els.input.removeAttribute("aria-activedescendant");
+}
+
+function setActiveSuggestion(index) {
+  state.activeSuggestion = index;
+  els.suggestions.querySelectorAll(".suggestion-item").forEach((button, itemIndex) => {
+    const isActive = itemIndex === index;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-selected", isActive ? "true" : "false");
+  });
+  els.input.setAttribute("aria-activedescendant", `city-suggestion-${index}`);
+}
+
+function renderSuggestions(places) {
+  state.suggestions = places;
+  state.activeSuggestion = -1;
+  els.suggestions.innerHTML = "";
+
+  if (!places.length) {
+    hideSuggestions();
+    return;
+  }
+
+  places.forEach((place, index) => {
+    const button = document.createElement("button");
+    const name = document.createElement("strong");
+    const detail = document.createElement("span");
+
+    button.type = "button";
+    button.className = "suggestion-item";
+    button.setAttribute("role", "option");
+    button.setAttribute("aria-selected", "false");
+    button.id = `city-suggestion-${index}`;
+    name.textContent = place.name;
+    detail.textContent = [place.state, place.country].filter(Boolean).join(", ");
+
+    button.append(name, detail);
+    button.addEventListener("mouseenter", () => setActiveSuggestion(index));
+    button.addEventListener("click", () => selectSuggestion(index));
+    els.suggestions.appendChild(button);
+  });
+
+  els.suggestions.classList.add("show");
+  els.input.setAttribute("aria-expanded", "true");
+}
+
+function requestSuggestions() {
+  const query = els.input.value.trim();
+  window.clearTimeout(suggestionTimer);
+
+  if (suggestionRequest) {
+    suggestionRequest.abort();
+  }
+
+  if (query.length < 2) {
+    hideSuggestions();
+    return;
+  }
+
+  suggestionTimer = window.setTimeout(async () => {
+    suggestionRequest = new AbortController();
+
+    try {
+      const places = await getCitySuggestions(query, suggestionRequest.signal);
+      renderSuggestions(places);
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        hideSuggestions();
+      }
+    }
+  }, 260);
+}
+
+function selectSuggestion(index) {
+  const place = state.suggestions[index];
+  if (!place) return;
+
+  const label = formatSuggestion(place);
+  els.input.value = label;
+  state.city = label;
+  state.coords = {
+    latitude: place.lat,
+    longitude: place.lon,
+  };
+  hideSuggestions();
+  loadWeather();
 }
 
 function aggregateDaily(list, timezone) {
@@ -308,11 +416,50 @@ async function loadWeather() {
 
 els.form.addEventListener("submit", (event) => {
   event.preventDefault();
+  if (state.activeSuggestion >= 0) {
+    selectSuggestion(state.activeSuggestion);
+    return;
+  }
+
   const city = els.input.value.trim();
   if (!city) return;
   state.city = city;
   state.coords = null;
+  hideSuggestions();
   loadWeather();
+});
+
+els.input.addEventListener("input", requestSuggestions);
+
+els.input.addEventListener("keydown", (event) => {
+  if (!state.suggestions.length) return;
+
+  if (event.key === "ArrowDown") {
+    event.preventDefault();
+    const nextIndex = state.activeSuggestion + 1 >= state.suggestions.length ? 0 : state.activeSuggestion + 1;
+    setActiveSuggestion(nextIndex);
+  }
+
+  if (event.key === "ArrowUp") {
+    event.preventDefault();
+    const nextIndex = state.activeSuggestion <= 0 ? state.suggestions.length - 1 : state.activeSuggestion - 1;
+    setActiveSuggestion(nextIndex);
+  }
+
+  if (event.key === "Enter" && state.activeSuggestion >= 0) {
+    event.preventDefault();
+    selectSuggestion(state.activeSuggestion);
+  }
+
+  if (event.key === "Escape") {
+    hideSuggestions();
+  }
+});
+
+document.addEventListener("click", (event) => {
+  if (!els.form.contains(event.target)) {
+    hideSuggestions();
+  }
 });
 
 els.locationBtn.addEventListener("click", () => {
