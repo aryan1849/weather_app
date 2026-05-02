@@ -11,6 +11,8 @@ const state = {
 const els = {
   openingAnimation: document.querySelector("#openingAnimation"),
   shell: document.querySelector(".weather-shell"),
+  cityBackdrop: document.querySelector("#cityBackdrop"),
+  landmarkLabel: document.querySelector("#landmarkLabel"),
   form: document.querySelector("#searchForm"),
   input: document.querySelector("#cityInput"),
   suggestions: document.querySelector("#citySuggestions"),
@@ -61,6 +63,24 @@ const round = (value) => Math.round(value);
 let suggestionTimer;
 let suggestionRequest;
 
+const cityLandmarks = [
+  { keys: ["new delhi", "delhi"], landmark: "delhi", label: "India Gate" },
+  { keys: ["agra"], landmark: "agra", label: "Taj Mahal" },
+  { keys: ["mumbai", "bombay"], landmark: "mumbai", label: "Gateway of India" },
+  { keys: ["jaipur"], landmark: "jaipur", label: "Hawa Mahal" },
+  { keys: ["paris"], landmark: "paris", label: "Eiffel Tower" },
+  { keys: ["london"], landmark: "london", label: "Big Ben" },
+  { keys: ["new york", "nyc"], landmark: "new-york", label: "Statue of Liberty" },
+  { keys: ["tokyo"], landmark: "tokyo", label: "Tokyo Tower" },
+  { keys: ["dubai"], landmark: "dubai", label: "Burj Khalifa" },
+  { keys: ["rome", "roma"], landmark: "rome", label: "Colosseum" },
+  { keys: ["sydney"], landmark: "sydney", label: "Sydney Opera House" },
+  { keys: ["cairo"], landmark: "cairo", label: "Pyramids of Giza" },
+  { keys: ["san francisco"], landmark: "san-francisco", label: "Golden Gate Bridge" },
+  { keys: ["rio de janeiro", "rio"], landmark: "rio", label: "Christ the Redeemer" },
+  { keys: ["beijing"], landmark: "beijing", label: "Temple of Heaven" },
+];
+
 function showToast(message) {
   els.toast.textContent = message;
   els.toast.classList.add("show");
@@ -102,6 +122,14 @@ function weatherMode(weather, icon) {
   if (main.includes("snow")) return "rain";
   if (main.includes("cloud")) return "clouds";
   return "clear";
+}
+
+function setCityBackdrop(cityName) {
+  const normalized = cityName.toLowerCase();
+  const match = cityLandmarks.find((item) => item.keys.some((key) => normalized.includes(key)));
+
+  els.cityBackdrop.dataset.landmark = match ? match.landmark : "generic";
+  els.landmarkLabel.textContent = match ? match.label : `${cityName} skyline`;
 }
 
 async function fetchJson(url, options = {}) {
@@ -396,6 +424,7 @@ function renderCurrent(current, forecast) {
   els.sunsetTime.textContent = formatTime(current.sys.sunset, timezone);
   els.input.value = current.name;
 
+  setCityBackdrop(current.name);
   positionSun(current);
   renderHourly(forecast.list, timezone);
   renderForecast(forecast.list, timezone);

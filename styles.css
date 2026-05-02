@@ -249,6 +249,274 @@ body.intro-done .weather-shell {
   pointer-events: none;
 }
 
+.city-backdrop {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(36px, 6vw, 82px);
+  width: min(620px, 72vw);
+  height: min(430px, 46vw);
+  opacity: 0.32;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 32px 52px rgba(0, 0, 0, 0.34));
+}
+
+.landmark-label {
+  position: absolute;
+  left: 50%;
+  bottom: -28px;
+  padding: 6px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: rgba(245, 251, 255, 0.78);
+  background: rgba(7, 16, 22, 0.34);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  backdrop-filter: blur(12px);
+}
+
+.landmark-art,
+.landmark-art::before,
+.landmark-art::after {
+  position: absolute;
+  content: "";
+}
+
+.landmark-art {
+  left: 50%;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  transform: translateX(-50%);
+  animation: landmarkFloat 7s ease-in-out infinite;
+}
+
+.landmark-art::before,
+.landmark-art::after {
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+}
+
+.city-backdrop::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -18px;
+  width: 92%;
+  height: 78px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(125, 227, 255, 0.2), transparent 68%);
+  transform: translateX(-50%);
+  animation: glowPulse 4.5s ease-in-out infinite;
+}
+
+.city-backdrop[data-landmark="delhi"] .landmark-art,
+.city-backdrop[data-landmark="mumbai"] .landmark-art {
+  width: 360px;
+  height: 260px;
+  border-radius: 45% 45% 0 0;
+  border: 22px solid rgba(255, 224, 130, 0.82);
+  border-bottom: 28px solid rgba(255, 224, 130, 0.82);
+  background:
+    linear-gradient(90deg, transparent 39%, rgba(7, 16, 22, 0.92) 39% 61%, transparent 61%),
+    linear-gradient(180deg, transparent 52%, rgba(255, 224, 130, 0.82) 52%);
+}
+
+.city-backdrop[data-landmark="delhi"] .landmark-art::before,
+.city-backdrop[data-landmark="mumbai"] .landmark-art::before {
+  width: 460px;
+  height: 42px;
+  border-radius: 8px 8px 0 0;
+  background: rgba(255, 224, 130, 0.82);
+}
+
+.city-backdrop[data-landmark="delhi"] .landmark-art::after,
+.city-backdrop[data-landmark="mumbai"] .landmark-art::after {
+  width: 72px;
+  height: 42px;
+  bottom: 218px;
+  border-radius: 8px 8px 0 0;
+  background: rgba(255, 224, 130, 0.82);
+}
+
+.city-backdrop[data-landmark="agra"] .landmark-art {
+  width: 470px;
+  height: 250px;
+  border-radius: 48% 48% 0 0;
+  background:
+    radial-gradient(circle at 50% 27%, rgba(245, 251, 255, 0.88) 0 72px, transparent 73px),
+    linear-gradient(90deg, transparent 8%, rgba(245, 251, 255, 0.78) 8% 13%, transparent 13% 87%, rgba(245, 251, 255, 0.78) 87% 92%, transparent 92%),
+    linear-gradient(180deg, transparent 42%, rgba(245, 251, 255, 0.84) 42%);
+}
+
+.city-backdrop[data-landmark="agra"] .landmark-art::before {
+  width: 560px;
+  height: 40px;
+  background: rgba(245, 251, 255, 0.84);
+}
+
+.city-backdrop[data-landmark="agra"] .landmark-art::after {
+  width: 22px;
+  height: 310px;
+  bottom: 0;
+  border-radius: 999px 999px 0 0;
+  background:
+    linear-gradient(90deg, rgba(245, 251, 255, 0.78), rgba(196, 235, 255, 0.62));
+  box-shadow: -232px 0 rgba(245, 251, 255, 0.72), 232px 0 rgba(245, 251, 255, 0.72);
+}
+
+.city-backdrop[data-landmark="paris"] .landmark-art,
+.city-backdrop[data-landmark="tokyo"] .landmark-art {
+  width: 260px;
+  height: 360px;
+  clip-path: polygon(47% 0, 53% 0, 62% 38%, 88% 100%, 67% 100%, 56% 62%, 44% 62%, 33% 100%, 12% 100%, 38% 38%);
+  background:
+    repeating-linear-gradient(0deg, rgba(125, 227, 255, 0.18) 0 12px, transparent 12px 24px),
+    linear-gradient(135deg, rgba(125, 227, 255, 0.9), rgba(255, 224, 130, 0.82));
+}
+
+.city-backdrop[data-landmark="paris"] .landmark-art::before,
+.city-backdrop[data-landmark="tokyo"] .landmark-art::before {
+  width: 330px;
+  height: 22px;
+  bottom: 94px;
+  background: rgba(245, 251, 255, 0.42);
+}
+
+.city-backdrop[data-landmark="london"] .landmark-art {
+  width: 190px;
+  height: 360px;
+  border-radius: 8px 8px 0 0;
+  background:
+    radial-gradient(circle at 50% 25%, rgba(7, 16, 22, 0.88) 0 38px, rgba(255, 224, 130, 0.92) 39px 51px, transparent 52px),
+    linear-gradient(90deg, transparent 42%, rgba(125, 227, 255, 0.85) 42% 58%, transparent 58%),
+    linear-gradient(180deg, rgba(245, 251, 255, 0.74), rgba(125, 227, 255, 0.72));
+}
+
+.city-backdrop[data-landmark="london"] .landmark-art::before {
+  width: 62px;
+  height: 96px;
+  bottom: 338px;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  background: rgba(255, 224, 130, 0.86);
+}
+
+.city-backdrop[data-landmark="new-york"] .landmark-art,
+.city-backdrop[data-landmark="rio"] .landmark-art {
+  width: 180px;
+  height: 320px;
+  border-radius: 90px 90px 8px 8px;
+  background: linear-gradient(180deg, rgba(126, 231, 135, 0.88), rgba(125, 227, 255, 0.74));
+}
+
+.city-backdrop[data-landmark="new-york"] .landmark-art::before,
+.city-backdrop[data-landmark="rio"] .landmark-art::before {
+  width: 36px;
+  height: 130px;
+  bottom: 304px;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  background: rgba(255, 224, 130, 0.9);
+  animation: torchGlow 1.8s ease-in-out infinite;
+}
+
+.city-backdrop[data-landmark="new-york"] .landmark-art::after,
+.city-backdrop[data-landmark="rio"] .landmark-art::after {
+  width: 370px;
+  height: 38px;
+  bottom: 228px;
+  border-radius: 999px;
+  background: rgba(126, 231, 135, 0.76);
+}
+
+.city-backdrop[data-landmark="dubai"] .landmark-art {
+  width: 170px;
+  height: 390px;
+  border-radius: 90px 90px 0 0;
+  clip-path: polygon(47% 0, 58% 0, 72% 100%, 26% 100%);
+  background: linear-gradient(180deg, rgba(245, 251, 255, 0.88), rgba(125, 227, 255, 0.76));
+}
+
+.city-backdrop[data-landmark="dubai"] .landmark-art::before {
+  width: 2px;
+  height: 104px;
+  bottom: 376px;
+  background: rgba(245, 251, 255, 0.9);
+  box-shadow: 0 0 24px rgba(125, 227, 255, 0.8);
+}
+
+.city-backdrop[data-landmark="rome"] .landmark-art {
+  width: 500px;
+  height: 220px;
+  border-radius: 50% 50% 8px 8px;
+  background:
+    radial-gradient(ellipse at 21% 70%, transparent 0 34px, rgba(255, 224, 130, 0.84) 35px 52px, transparent 53px),
+    radial-gradient(ellipse at 38% 70%, transparent 0 34px, rgba(255, 224, 130, 0.84) 35px 52px, transparent 53px),
+    radial-gradient(ellipse at 55% 70%, transparent 0 34px, rgba(255, 224, 130, 0.84) 35px 52px, transparent 53px),
+    radial-gradient(ellipse at 72% 70%, transparent 0 34px, rgba(255, 224, 130, 0.84) 35px 52px, transparent 53px),
+    linear-gradient(180deg, rgba(255, 224, 130, 0.82), rgba(255, 255, 255, 0.42));
+}
+
+.city-backdrop[data-landmark="sydney"] .landmark-art {
+  width: 520px;
+  height: 240px;
+  background:
+    radial-gradient(ellipse at 34% 100%, rgba(245, 251, 255, 0.86) 0 88px, transparent 89px),
+    radial-gradient(ellipse at 50% 100%, rgba(245, 251, 255, 0.78) 0 118px, transparent 119px),
+    radial-gradient(ellipse at 66% 100%, rgba(245, 251, 255, 0.86) 0 88px, transparent 89px);
+}
+
+.city-backdrop[data-landmark="sydney"] .landmark-art::before {
+  width: 560px;
+  height: 34px;
+  background: rgba(125, 227, 255, 0.58);
+}
+
+.city-backdrop[data-landmark="cairo"] .landmark-art {
+  width: 560px;
+  height: 230px;
+  background:
+    linear-gradient(135deg, transparent 0 50%, rgba(255, 224, 130, 0.84) 50%) 14% 100% / 210px 180px no-repeat,
+    linear-gradient(135deg, transparent 0 50%, rgba(255, 224, 130, 0.72) 50%) 82% 100% / 170px 132px no-repeat,
+    linear-gradient(135deg, transparent 0 50%, rgba(255, 224, 130, 0.92) 50%) 50% 100% / 270px 230px no-repeat;
+}
+
+.city-backdrop[data-landmark="san-francisco"] .landmark-art {
+  width: 560px;
+  height: 260px;
+  background:
+    linear-gradient(90deg, rgba(255, 123, 114, 0.84) 0 18px, transparent 18px 542px, rgba(255, 123, 114, 0.84) 542px 560px),
+    linear-gradient(180deg, transparent 54%, rgba(255, 123, 114, 0.86) 54% 64%, transparent 64%);
+}
+
+.city-backdrop[data-landmark="san-francisco"] .landmark-art::before {
+  width: 560px;
+  height: 190px;
+  bottom: 48px;
+  border-top: 5px solid rgba(255, 123, 114, 0.82);
+  border-radius: 50% 50% 0 0;
+}
+
+.city-backdrop[data-landmark="beijing"] .landmark-art,
+.city-backdrop[data-landmark="jaipur"] .landmark-art,
+.city-backdrop[data-landmark="generic"] .landmark-art {
+  width: 540px;
+  height: 230px;
+  background:
+    linear-gradient(90deg, rgba(125, 227, 255, 0.66) 0 13%, transparent 13% 17%, rgba(255, 224, 130, 0.72) 17% 32%, transparent 32% 37%, rgba(126, 231, 135, 0.64) 37% 54%, transparent 54% 59%, rgba(245, 251, 255, 0.62) 59% 75%, transparent 75% 80%, rgba(125, 227, 255, 0.7) 80% 100%) bottom / 100% 82% no-repeat;
+}
+
+.city-backdrop[data-landmark="beijing"] .landmark-art::before,
+.city-backdrop[data-landmark="jaipur"] .landmark-art::before,
+.city-backdrop[data-landmark="generic"] .landmark-art::before {
+  width: 590px;
+  height: 32px;
+  background: rgba(255, 224, 130, 0.78);
+}
+
 .sun-core {
   position: absolute;
   right: 8vw;
@@ -903,6 +1171,21 @@ h2 {
 @keyframes rain {
   from { background-position: 0 0; }
   to { background-position: 0 120px; }
+}
+
+@keyframes landmarkFloat {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -12px; }
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.55; transform: translateX(-50%) scaleX(0.92); }
+  50% { opacity: 1; transform: translateX(-50%) scaleX(1.06); }
+}
+
+@keyframes torchGlow {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(255, 224, 130, 0.7)); }
+  50% { filter: drop-shadow(0 0 24px rgba(255, 224, 130, 0.95)); }
 }
 
 @keyframes gridSweep {
