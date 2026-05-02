@@ -330,12 +330,12 @@ function renderHourly(list, timezone) {
     <article class="hour-card">
       <span>${formatTime(item.dt, timezone, { hour12: true }).replace(":00", "")}</span>
       <img src="${iconUrl(item.weather[0].icon)}" alt="${item.weather[0].description}">
-      <strong>${round(item.main.temp)}&deg;${unitLabel()}</strong>
+      <strong>${round(item.main.temp)}°${unitLabel()}</strong>
       <span>${round(item.pop * 100)}% rain</span>
     </article>
   `).join("");
 
-  els.chartRange.textContent = `${round(Math.min(...points.map((item) => item.main.temp)))}&deg; to ${round(Math.max(...points.map((item) => item.main.temp)))}&deg;`;
+  els.chartRange.textContent = `${round(Math.min(...points.map((item) => item.main.temp)))}° to ${round(Math.max(...points.map((item) => item.main.temp)))}°`;
   drawChart(points);
 }
 
@@ -352,7 +352,7 @@ function renderForecast(list, timezone) {
         <strong>${day.day}</strong>
         <img src="${iconUrl(day.icon)}" alt="${day.description}">
         <div class="range-bar"><i style="width:${width}%"></i></div>
-        <span>${round(day.min)}&deg; / ${round(day.max)}&deg;</span>
+        <span>${round(day.min)}° / ${round(day.max)}°</span>
       </article>
     `;
   }).join("");
@@ -383,9 +383,9 @@ function renderCurrent(current, forecast) {
   els.weatherIcon.alt = weather.description;
   els.tempValue.textContent = round(current.main.temp);
   els.unitSymbol.textContent = unitLabel();
-  els.feelsLike.textContent = `Feels like ${round(current.main.feels_like)}&deg;${unitLabel()}`;
+  els.feelsLike.textContent = `Feels like ${round(current.main.feels_like)}°${unitLabel()}`;
   els.localTime.textContent = `Local time ${formatTime(current.dt, timezone, { weekday: "short" })}`;
-  els.highLow.textContent = `H ${round(current.main.temp_max)}&deg; / L ${round(current.main.temp_min)}&deg;`;
+  els.highLow.textContent = `H ${round(current.main.temp_max)}° / L ${round(current.main.temp_min)}°`;
   els.windValue.textContent = `${round(current.wind.speed)} ${speedLabel()}`;
   els.windHint.textContent = `${windDirection(current.wind.deg || 0)} direction`;
   els.humidityValue.textContent = `${current.main.humidity}%`;
